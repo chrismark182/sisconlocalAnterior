@@ -36,12 +36,7 @@ class C_dashboard extends CI_Controller {
 		$username= $this->data['session']->USUARI_C_USERNAME;
 		
 		$categoria= $this->data['session']->CATEGO_N_ID;//Proxima actualizacion
-		
-		
-		/* 	if($usuario==1){
-		$this->load->view('V_dashboard', $this->data);
-		} */
-		
+				
 		//SERVIDOR
 		//username == "MDiaz"  // "ACuglievan" // Bigote Puerta1(Sflores,JCuzcamayta,JCorozco) // Puerta 3 (JDhernandez,JCchavez) //Puerta 4 (Nhernandez,Wmaldonado)  // Puerta 5 (Jvolcan,Rruiz) //  Aqp Lurin (Mmartinez,Jmendoza)  // AQP CALLAO (Ccapcha,Avalencia,Jburgos)
 		
@@ -59,10 +54,6 @@ class C_dashboard extends CI_Controller {
 			redirect('ingreso', 'refresh');   
 			//$this->load->view('V_dashboard', $this->data);
 		}
-		//else if($usuario == 18)
-		//{
-		//	$this->load->view('V_dashboard', $this->data);
-		//}
 		else{
 			$this->load->view('V_dashboard', $this->data);
 		}

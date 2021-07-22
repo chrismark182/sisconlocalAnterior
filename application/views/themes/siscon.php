@@ -196,9 +196,6 @@
 				<li><a href="<?= base_url() ?>logout">Cerrar Sesión</a></li>
 			</ul>
 		
-			
-
-
 			<?php if(!empty($accesos['padres'])):  ?>
 				<?php foreach ($accesos['padres'] as $menu_padre): ?>
 					<ul id="<?= $menu_padre->MENU_ID; ?>" class="dropdown-content">

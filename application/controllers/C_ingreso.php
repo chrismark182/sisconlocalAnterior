@@ -34,21 +34,23 @@ class C_ingreso extends CI_Controller {
     //Vistas
     public function index() 
 	{   
+		//OBTENER EMPRESA
 		$empresa=$this->data['empresa']->EMPRES_N_ID;
-		
+		//OBTENER USUSARIO
 		$username= $this->data['session']->USUARI_C_USERNAME;
 		
 		//$listadosector = $this->M_crud->sql("Exec EMPRESA_LIS 0");
 		$listadosector = $this->M_crud->sql("Exec SEDES_USUARIO_LIS 0 , " .$username );
 		
+		//Listado Sedes(Empresas)
 		$this->data['listadosector'] = $listadosector;
-		
-		//
 
+		//Obtener categoria
 		//$categoria=$this->data['categoria']->CATEGO_N_ID;
-		//$this->data['tipo_ingreso'] = $this->M_crud->sql("SELECT * FROM TIPO_INGRESO where");
+		
 		$this->data['tipo_ingreso'] = $this->M_crud->sql("SELECT * FROM TIPO_INGRESO where empres_n_id=".$empresa);
-	    //$this->data['tipo_ingreso'] = $this->M_crud->sql("SELECT * FROM TIPO_INGRESO");
+		
+	 
 	    $this->data['tipo_unidad'] = $this->M_crud->sql("SELECT * FROM TIPO_UNIDAD WHERE TIPUNI_ESTADO='0' order by TIPUNI_N_ORDEN asc");
 		
 		if($empresa==1)
@@ -57,9 +59,15 @@ class C_ingreso extends CI_Controller {
 		}
 		else if($empresa==2)
 		{
+		   $this->load->view('ingreso/V_prueba', $this->data);	
+		
+		}/*
+		else if($empresa==2)
+		{
 		   $this->load->view('ingreso/V_index', $this->data);	
 		
-		}else if($empresa==3)
+		}
+		*/else if($empresa==3)
 		{
 		   $this->load->view('ingreso/V_indexaqpcallao', $this->data);	
 		
@@ -71,7 +79,6 @@ class C_ingreso extends CI_Controller {
 		}
     }
 	
-	
 	public function prueba() 
 	{   
 	    //$this->data['tipo_ingreso'] = $this->M_crud->sql("SELECT * FROM TIPO_INGRESO");
@@ -80,7 +87,6 @@ class C_ingreso extends CI_Controller {
 	    $this->data['tipo_unidad'] = $this->M_crud->sql("SELECT * FROM TIPO_UNIDAD WHERE TIPUNI_ESTADO='0' order by TIPUNI_N_ORDEN asc");
         $this->load->view('ingreso/V_prueba', $this->data);
     }
-	
 	
 	public function indexaqpcallao() 
 	{   
@@ -124,7 +130,7 @@ class C_ingreso extends CI_Controller {
 		$this->data['visitada'] = $this->M_crud->sql("Exec  CLIENTE_ESCLIENTE_LIS 1,'1'");
 		$this->data['persona_contacto'] = $this->M_crud->sql("Exec  CLIENTE_ESCLIENTE_LIS 1,'1'");
         
-		if($empresa==1 or $empresa==4)
+		if($empresa==1 or $empresa==4 or $empresa==2 )
 		{
 		$this->load->view('ingreso/V_nuevo', $this->data);
 		}
@@ -134,7 +140,6 @@ class C_ingreso extends CI_Controller {
 		}
 		
     }
-	
 	
 	public function nuevoalterno()
     {
@@ -150,14 +155,11 @@ class C_ingreso extends CI_Controller {
 		$this->data['persona_contacto'] = $this->M_crud->sql("Exec  CLIENTE_ESCLIENTE_LIS 1,'1'");
         $this->load->view('ingreso/V_nuevoalterno', $this->data);        
     }
-	
-	
-	
+		
 	public function nuevotrabajador()
     {
 		$this->data['misdoc'] = $this->M_crud->sql("Exec TIPO_DOCUMENTO_PERSONAS_LIS");
 		$empresa=$this->data['empresa']->EMPRES_N_ID;
-		
 		
 		$this->data['tipo_ingreso'] = $this->M_crud->sql("SELECT * FROM TIPO_INGRESO where empres_n_id=".$empresa);
 		$this->data['tipo_unidad'] = $this->M_crud->sql("SELECT * FROM TIPO_UNIDAD WHERE TIPUNI_ESTADO='0' order by TIPUNI_N_ORDEN asc");
@@ -170,11 +172,6 @@ class C_ingreso extends CI_Controller {
     
 	}
 	
-	
-	
-	
-	
-
     //Procesos
     public function buscar()
     {
@@ -223,8 +220,7 @@ class C_ingreso extends CI_Controller {
 	public function crearC()
 	{
 		$data = json_decode(file_get_contents('php://input'), true);
-		
-		
+	
 		/*sql = "Exec PERSONA_INS "      . $this->data['empresa']->EMPRES_N_ID . ","
 										. $this->input->post('cliente_') . "," 
 										. $this->input->post('tdocumento_') . ",'" 
@@ -254,9 +250,7 @@ class C_ingreso extends CI_Controller {
 		//echo "complete";	
 										//$url = 'personas?n=' . $this->input->post('ndocumento'); 
 										//redirect($url,'refresh');
-										
-										
-										
+												
 										
 		/*						
 	    $data = json_decode(file_get_contents('php://input'), true);
@@ -265,8 +259,6 @@ class C_ingreso extends CI_Controller {
         echo json_encode($query, true);
 		*/
 	}
-
-
 
     public function actualizar($empresa,$cliente)
     {
@@ -293,8 +285,7 @@ class C_ingreso extends CI_Controller {
         $sql = "Exec ALQUILER_DEL "     . $empresa .","
                                         . $acuerdo; 
                                       /*   .","
-                                        .$this->data['session']->USUARI_N_ID ;  */
-                                        
+                                        .$this->data['session']->USUARI_N_ID ;  */                       
         $this->M_crud->sql($sql);      
         $this->session->set_flashdata('message','Datos eliminados correctamente');
         redirect('acuerdos', 'refresh');       
@@ -330,9 +321,6 @@ class C_ingreso extends CI_Controller {
         $this->pdfgenerator->generate($html, "reporte.pdf");
 	}
 
-
-
-
 	public function delete($id)
 	{
 		$sql = "Exec MOVIMIENTO_PERSONA_DEL  {$this->session->userdata('empresa_id')}, {$id}, {$this->data['session']->USUARI_N_ID} ";        
@@ -355,7 +343,6 @@ class C_ingreso extends CI_Controller {
         redirect('ingreso', 'refresh');
 	}
 
-	
 	public function exportar2excel(){
 	$this->excel->setActiveSheetIndex(0);         
     $this->excel->getActiveSheet()->setTitle('test worksheet');
@@ -387,7 +374,6 @@ class C_ingreso extends CI_Controller {
 	//$x=2;
 	//$xx=1;
 	//$tipo_ingreso=$this->input->get('var9');
-	
 	if($empresa==1){
 	$sql = "Exec MOVIMIENTO_PERSONA_LIS_PRUEBA ".$empresa.",'{$dni}'".",'{$empresa_visitante}'".",'{$apellido}'".",'{$placa}'".",'{$fecha_desde}'".",'{$fecha_hasta}'".",'{$situacion}'".",'{$tipo_ingreso}','{$usuario}','{$tipobusqueda}','{$tipolistado}'";
 	}
@@ -396,10 +382,8 @@ class C_ingreso extends CI_Controller {
 	$sql = "Exec MOVIMIENTO_PERSONA_LIS_LOPUD ".$empresa.",'{$dni}'".",'{$empresa_visitante}'".",'{$apellido}'".",'{$placa}'".",'{$fecha_desde}'".",'{$fecha_hasta}'".",'{$situacion}'".",'{$tipo_ingreso}','{$usuario}','{$tipobusqueda}','{$tipolistado}'";	
 	}
 	
-	
 	$result = $this->M_crud->sql($sql);
 		
-	
 	//Contador de filas
         $contador = 1;
         //Le aplicamos ancho las columnas.
@@ -451,8 +435,6 @@ class C_ingreso extends CI_Controller {
 	}
 	*/
 	
-	
-		
 	foreach($result as $l){
 		
 		$contador++;
@@ -469,8 +451,6 @@ class C_ingreso extends CI_Controller {
 
 	}
 	
-	
-	
     header('Content-Type: application/vnd.ms-excel');         
     header('Content-Disposition: attachment;filename="MovimientoPersona.xls"');
     header('Cache-Control: max-age=0'); //no cache         
@@ -479,8 +459,6 @@ class C_ingreso extends CI_Controller {
     // Forzamos a la descarga         
     $objWriter->save('php://output');
   }
-  
-  
   
   public function exportaraqpcallao(){
 	$this->excel->setActiveSheetIndex(0);         
@@ -500,7 +478,6 @@ class C_ingreso extends CI_Controller {
 	$tipolistado=$this->input->get('var11');
 	$tipodatos=$this->input->get('var12');
 	
-	
 	if($empresa==1 or $empresa==2){
 	$usuario=1;
 	}
@@ -509,21 +486,17 @@ class C_ingreso extends CI_Controller {
 	$usuario=24;
 	//$usuario=25;
 	}
-	
 	//$x=2;
 	//$xx=1;
 	//$tipo_ingreso=$this->input->get('var9');
-	
 	
 	$sql = "Exec MOVIMIENTO_PERSONA_LIS_AQPCALLAO ".$empresa.",'{$dni}'".",'{$empresa_visitante}'".",'{$apellido}'".",'{$placa}'".",'{$fecha_desde}'".",'{$fecha_hasta}'".",'{$situacion}'".",'{$tipo_ingreso}','{$usuario}','{$tipobusqueda}','{$tipolistado}','{$tipodatos}'";
 	
 	$result = $this->M_crud->sql($sql);
 		
-	
 	//Contador de filas
         $contador = 1;
-		
-			
+	
 	if($tipolistado==1){
 			
         //Le aplicamos ancho las columnas.
@@ -600,16 +573,11 @@ class C_ingreso extends CI_Controller {
         $this->excel->getActiveSheet()->setCellValue("J{$contador}", 'Almacen');
         $this->excel->getActiveSheet()->setCellValue("K{$contador}", 'Servicio');
 		
-		
-		
 	}
 
-
-	
 	foreach($result as $l){
 		
-		$contador++;
-	
+	$contador++;
 	
 		if($tipolistado==1){
 			
@@ -627,7 +595,7 @@ class C_ingreso extends CI_Controller {
 		}
 		elseif($tipolistado==2)
 		{
-			
+			 
 		$this->excel->getActiveSheet()->setCellValue("A{$contador}", $l->PERSON_C_DOCUMENTO);
 		$this->excel->getActiveSheet()->setCellValue("B{$contador}", $l->RAZON_SOCIAL_VISITANTE);
 		$this->excel->getActiveSheet()->setCellValue("C{$contador}", $l->PERSON_C_NOMBRE);
@@ -639,17 +607,10 @@ class C_ingreso extends CI_Controller {
 		$this->excel->getActiveSheet()->setCellValue("I{$contador}", $l->FECHA_HORA_SALIDA);
 		$this->excel->getActiveSheet()->setCellValue("J{$contador}", $l->TIPLALMACEN_C_DESCRIPCION);
 		$this->excel->getActiveSheet()->setCellValue("K{$contador}", $l->TIPSERVICIO_C_DESCRIPCION);
-		
-			
+				
 		}
 	
-	
-	
-	
-	
 	}
-	
-	
 	
     header('Content-Type: application/vnd.ms-excel');         
     header('Content-Disposition: attachment;filename="MovimientoPersona.xls"');
@@ -660,8 +621,4 @@ class C_ingreso extends CI_Controller {
     $objWriter->save('php://output');
   }
 
-
-
-
 }
-
