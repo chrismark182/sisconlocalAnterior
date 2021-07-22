@@ -388,8 +388,14 @@ class C_ingreso extends CI_Controller {
 	//$xx=1;
 	//$tipo_ingreso=$this->input->get('var9');
 	
-	
+	if($empresa==1){
 	$sql = "Exec MOVIMIENTO_PERSONA_LIS_PRUEBA ".$empresa.",'{$dni}'".",'{$empresa_visitante}'".",'{$apellido}'".",'{$placa}'".",'{$fecha_desde}'".",'{$fecha_hasta}'".",'{$situacion}'".",'{$tipo_ingreso}','{$usuario}','{$tipobusqueda}','{$tipolistado}'";
+	}
+	else if($empresa==4)
+	{
+	$sql = "Exec MOVIMIENTO_PERSONA_LIS_LOPUD ".$empresa.",'{$dni}'".",'{$empresa_visitante}'".",'{$apellido}'".",'{$placa}'".",'{$fecha_desde}'".",'{$fecha_hasta}'".",'{$situacion}'".",'{$tipo_ingreso}','{$usuario}','{$tipobusqueda}','{$tipolistado}'";	
+	}
+	
 	
 	$result = $this->M_crud->sql($sql);
 		
